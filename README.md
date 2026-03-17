@@ -42,7 +42,7 @@ Why it is useful:
 
 ## Live Demo
 
-Demo link: https://your-live-demo-link-here
+Demo link: https://attendance-sgpa-calculator.vercel.app/
 
 ## Installation
 
