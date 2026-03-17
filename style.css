@@ -18,32 +18,39 @@
   --warning: #ef9f34;
   --shadow: 0 24px 60px rgba(19, 48, 95, 0.12);
   --shadow-strong: 0 32px 80px rgba(19, 48, 95, 0.18);
+  --glow: 0 0 20px rgba(23, 97, 255, 0.12);
+  --glow-strong: 0 0 32px rgba(23, 97, 255, 0.2);
   --radius-xl: 28px;
   --radius-lg: 22px;
   --radius-md: 16px;
   --radius-sm: 12px;
   --container: 1240px;
+  color-scheme: light;
 }
 
 [data-theme="dark"] {
-  --bg: #08111f;
-  --bg-soft: #0b1a2c;
-  --surface: rgba(12, 22, 39, 0.78);
-  --surface-strong: rgba(12, 22, 39, 0.92);
-  --surface-inset: rgba(16, 29, 48, 0.88);
-  --border: rgba(166, 199, 255, 0.1);
-  --border-strong: rgba(166, 199, 255, 0.2);
-  --text: #f5f8ff;
-  --muted: #9eb0c7;
-  --primary: #5e8dff;
-  --primary-deep: #7eb0ff;
-  --secondary: #43d5d7;
-  --accent: #ffd877;
-  --success: #34d399;
-  --danger: #ff7a86;
-  --warning: #ffc163;
-  --shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
-  --shadow-strong: 0 36px 90px rgba(0, 0, 0, 0.46);
+  /* AMOLED dark — true black background with electric cyan accent */
+  --bg: #000000;
+  --bg-soft: #050507;
+  --surface: rgba(13, 13, 15, 0.97);
+  --surface-strong: rgba(18, 18, 22, 0.99);
+  --surface-inset: rgba(10, 10, 12, 0.98);
+  --border: rgba(255, 255, 255, 0.055);
+  --border-strong: rgba(255, 255, 255, 0.11);
+  --text: #f5f5ff;
+  --muted: #8b8b9e;
+  --primary: #00d4ff;
+  --primary-deep: #66e8ff;
+  --secondary: #7c6aff;
+  --accent: #ffd060;
+  --success: #22c55e;
+  --danger: #f87171;
+  --warning: #fb923c;
+  --shadow: 0 4px 32px rgba(0, 0, 0, 0.85);
+  --shadow-strong: 0 8px 48px rgba(0, 0, 0, 0.92);
+  --glow: 0 0 20px rgba(0, 212, 255, 0.18);
+  --glow-strong: 0 0 32px rgba(0, 212, 255, 0.3);
+  color-scheme: dark;
 }
 
 * {
@@ -63,6 +70,7 @@ body {
     radial-gradient(circle at 15% 20%, rgba(23, 97, 255, 0.18), transparent 28%),
     radial-gradient(circle at 82% 16%, rgba(22, 194, 213, 0.16), transparent 30%),
     linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 54%, color-mix(in srgb, var(--bg) 82%, white 18%) 100%);
+  transition: background-color 320ms ease;
 }
 
 button,
@@ -820,6 +828,8 @@ a:focus-visible {
 }
 
 [data-theme="dark"] .gp-chip {
+  background: rgba(0, 212, 255, 0.07);
+  border-color: rgba(0, 212, 255, 0.2);
   color: var(--primary-deep);
 }
 
@@ -916,6 +926,169 @@ a:focus-visible {
   100% {
     box-shadow: var(--shadow);
   }
+}
+
+/* ============================================================
+   AMOLED Dark Mode Enhancements
+   Targeted overrides for premium AMOLED experience.
+   ============================================================ */
+
+/* True black body — kills all pixels for real AMOLED savings */
+[data-theme="dark"] body {
+  background: #000000;
+}
+
+/* Subtler, recolored decorative blobs for AMOLED contrast */
+[data-theme="dark"] .ambient {
+  opacity: 0.07;
+}
+[data-theme="dark"] .ambient-one {
+  background: rgba(0, 212, 255, 0.55);
+}
+[data-theme="dark"] .ambient-two {
+  background: rgba(124, 106, 255, 0.5);
+}
+[data-theme="dark"] .ambient-three {
+  background: rgba(0, 212, 255, 0.35);
+}
+
+/* Brand mark — electric cyan-to-purple gradient with glow */
+[data-theme="dark"] .brand-mark {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  box-shadow: var(--glow), var(--shadow);
+}
+
+/* Hero panel shimmer — very subtle so black stays pure */
+[data-theme="dark"] .hero-panel::before {
+  background: linear-gradient(
+    130deg,
+    rgba(0, 212, 255, 0.032) 0%,
+    rgba(124, 106, 255, 0.024) 45%,
+    rgba(255, 208, 96, 0.028) 100%
+  );
+}
+
+/* Eyebrow labels in accent cyan */
+[data-theme="dark"] .eyebrow {
+  color: var(--primary);
+}
+
+/* Primary buttons — cyan-to-purple gradient + glow */
+[data-theme="dark"] .primary-link,
+[data-theme="dark"] .action-button.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #000000;
+  box-shadow: 0 0 18px rgba(0, 212, 255, 0.22), 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+[data-theme="dark"] .primary-link:hover,
+[data-theme="dark"] .action-button.primary:hover {
+  box-shadow: var(--glow-strong), 0 12px 28px rgba(0, 0, 0, 0.7);
+}
+
+/* Secondary button — subtle border glow on hover */
+[data-theme="dark"] .secondary-link:hover,
+[data-theme="dark"] .action-button.secondary:hover {
+  border-color: rgba(0, 212, 255, 0.28);
+  box-shadow: 0 0 14px rgba(0, 212, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Input fields — cyan glow on hover and focus */
+[data-theme="dark"] .input-control:hover {
+  border-color: rgba(0, 212, 255, 0.22);
+}
+[data-theme="dark"] .input-control:focus-visible {
+  border-color: rgba(0, 212, 255, 0.5);
+  box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1), 0 0 18px rgba(0, 212, 255, 0.09);
+}
+
+/* Hero stat tile values — primary tint */
+[data-theme="dark"] .stat-value {
+  color: var(--primary-deep);
+}
+
+/* Attendance ring center percentage — glowing */
+[data-theme="dark"] .ring-percent {
+  color: var(--primary-deep);
+  text-shadow: 0 0 24px rgba(0, 212, 255, 0.3);
+}
+
+/* Ring background track — barely visible on black */
+[data-theme="dark"] .ring-track {
+  stroke: rgba(255, 255, 255, 0.05);
+}
+
+/* Progress bar — neon cyan shimmer */
+[data-theme="dark"] .progress-fill {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.45);
+}
+
+/* SGPA output value — glowing display */
+[data-theme="dark"] .sgpa-value {
+  color: var(--primary-deep);
+  text-shadow: 0 0 32px rgba(0, 212, 255, 0.3);
+}
+
+/* Neutral counter values — cyan tint */
+[data-theme="dark"] .counter-neutral {
+  color: var(--primary);
+}
+
+/* Status banners — colored edge highlights */
+[data-theme="dark"] .status-ok {
+  border-color: rgba(34, 197, 94, 0.22);
+}
+[data-theme="dark"] .status-bad {
+  border-color: rgba(248, 113, 113, 0.22);
+}
+
+/* Site nav link hover */
+[data-theme="dark"] .site-nav a:hover {
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--primary);
+}
+
+/* Theme toggle button — cyan tint on dark */
+[data-theme="dark"] .theme-toggle {
+  border-color: rgba(0, 212, 255, 0.16);
+}
+[data-theme="dark"] .theme-toggle:hover {
+  border-color: rgba(0, 212, 255, 0.34);
+  box-shadow: 0 0 14px rgba(0, 212, 255, 0.12);
+}
+
+/* Insight card icons — themed for dark */
+[data-theme="dark"] .insight-icon {
+  background: rgba(0, 212, 255, 0.1);
+}
+
+/* Remove row button hover — red-tinted on AMOLED */
+[data-theme="dark"] .remove-row-button:hover {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.22);
+  color: var(--danger);
+}
+
+/* Neon SGPA pulse animation override for dark mode */
+@keyframes sgpaPulseAMOLED {
+  0%   { box-shadow: var(--shadow); }
+  50%  { box-shadow: var(--glow-strong), var(--shadow); }
+  100% { box-shadow: var(--shadow); }
+}
+[data-theme="dark"] .sgpa-card-pulse {
+  animation: sgpaPulseAMOLED 520ms ease;
+}
+
+/* Broad transitions — applied only during active theme switch via JS class */
+.theme-switching,
+.theme-switching * {
+  transition:
+    background-color 300ms ease,
+    background 300ms ease,
+    border-color 300ms ease,
+    color 270ms ease,
+    box-shadow 300ms ease,
+    text-shadow 300ms ease !important;
 }
 
 @media (max-width: 1080px) {

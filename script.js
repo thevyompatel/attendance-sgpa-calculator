@@ -62,13 +62,39 @@
   // Theme management for the whole dashboard.
   const themeToggle = $('#themeToggle');
   const themeToggleThumb = $('#themeToggleThumb');
+  const themeToggleLabel = $('#themeToggleLabel');
 
   function applyTheme(theme) {
     const normalizedTheme = theme === 'dark' ? 'dark' : 'light';
+
+    // Briefly attach a class so all surfaces animate during the switch.
+    doc.documentElement.classList.add('theme-switching');
     doc.documentElement.setAttribute('data-theme', normalizedTheme);
     themeToggle.setAttribute('aria-pressed', String(normalizedTheme === 'dark'));
-    themeToggleThumb.textContent = normalizedTheme === 'dark' ? '☾' : '☀';
+    themeToggleThumb.textContent = normalizedTheme === 'dark' ? '◑' : '☀';
+    if (themeToggleLabel) {
+      themeToggleLabel.textContent = normalizedTheme === 'dark' ? 'AMOLED' : 'Light';
+    }
     localStorage.setItem(storageKeys.theme, normalizedTheme);
+
+    // Update the SVG attendance ring gradient to match the active theme.
+    const gradientStops = doc.querySelectorAll('#attendanceGradient stop');
+    if (gradientStops.length >= 3) {
+      if (normalizedTheme === 'dark') {
+        gradientStops[0].setAttribute('stop-color', '#00d4ff');
+        gradientStops[1].setAttribute('stop-color', '#7c6aff');
+        gradientStops[2].setAttribute('stop-color', '#00d4ff');
+      } else {
+        gradientStops[0].setAttribute('stop-color', '#1761ff');
+        gradientStops[1].setAttribute('stop-color', '#16c2d5');
+        gradientStops[2].setAttribute('stop-color', '#f8c84f');
+      }
+    }
+
+    // Remove transition class once the animation settles.
+    window.setTimeout(function () {
+      doc.documentElement.classList.remove('theme-switching');
+    }, 380);
   }
 
   function initTheme() {
@@ -304,7 +330,11 @@
       particle.style.width = '10px';
       particle.style.height = '16px';
       particle.style.borderRadius = '3px';
-      particle.style.background = ['#1761ff', '#16c2d5', '#f8c84f', '#1ea971'][index % 4];
+      const isDark = doc.documentElement.getAttribute('data-theme') === 'dark';
+      const confettiColors = isDark
+        ? ['#00d4ff', '#7c6aff', '#ffd060', '#22c55e']
+        : ['#1761ff', '#16c2d5', '#f8c84f', '#1ea971'];
+      particle.style.background = confettiColors[index % 4];
       particle.animate([
         { transform: 'translate3d(0, 0, 0) rotate(0deg)', opacity: 1 },
         { transform: 'translate3d(' + (Math.random() * 180 - 90) + 'px, ' + (window.innerHeight * 0.7 + Math.random() * 120) + 'px, 0) rotate(' + (Math.random() * 540) + 'deg)', opacity: 0 }
