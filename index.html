@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Professional academic dashboard with attendance tracking and SGPA calculation tools." />
+  <title>Attendance and SGPA Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <!-- Decorative background layers for the shared dashboard theme. -->
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+    <div class="ambient ambient-three" aria-hidden="true"></div>
+
+    <!-- Global header and navigation. -->
+    <header class="site-header">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">A+</div>
+        <div>
+          <p class="eyebrow">Academic Dashboard</p>
+          <h1>Attendance and SGPA Calculator</h1>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#attendance-section">Attendance</a>
+          <a href="#sgpa-section">SGPA</a>
+        </nav>
+
+        <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle theme">
+          <span class="theme-toggle-track">
+            <span id="themeToggleThumb" class="theme-toggle-thumb">☀</span>
+          </span>
+          <span class="theme-toggle-label">Theme</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Overview hero with shared academic summary stats. -->
+      <section class="hero-panel surface-card" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Student Performance Toolkit</p>
+          <h2 id="hero-title">Track attendance risk and semester performance from one clean dashboard.</h2>
+          <p class="hero-text">
+            This merged workspace combines live attendance analytics with weighted SGPA calculation, wrapped in one responsive academic tool.
+          </p>
+          <div class="hero-actions-row">
+            <a class="primary-link" href="#attendance-section">Open Attendance</a>
+            <a class="secondary-link" href="#sgpa-section">Open SGPA</a>
+          </div>
+        </div>
+
+        <div class="hero-stats" aria-label="Quick academic snapshot">
+          <article class="stat-tile">
+            <span class="stat-label">Attendance</span>
+            <strong id="heroAttendanceValue" class="stat-value">0%</strong>
+            <span class="stat-note">Live from conducted lectures</span>
+          </article>
+          <article class="stat-tile">
+            <span class="stat-label">Current SGPA</span>
+            <strong id="heroSgpaValue" class="stat-value">--</strong>
+            <span class="stat-note">Weighted by credits</span>
+          </article>
+          <article class="stat-tile">
+            <span class="stat-label">Subjects</span>
+            <strong id="heroSubjectCount" class="stat-value">1</strong>
+            <span class="stat-note">Rows in SGPA calculator</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <!-- Attendance analytics module. -->
+        <section id="attendance-section" class="surface-card module-card attendance-module" aria-labelledby="attendance-title">
+          <div class="module-heading">
+            <div>
+              <p class="eyebrow">Attendance Planner</p>
+              <h2 id="attendance-title">Attendance Calculator</h2>
+            </div>
+            <p class="module-description">Monitor current percentage, bunk allowance, and end-of-term feasibility.</p>
+          </div>
+
+          <div class="attendance-layout">
+            <div class="attendance-form-panel">
+              <form class="form-grid" novalidate>
+                <div class="field field-wide">
+                  <label for="target">Target Attendance (%)</label>
+                  <input id="target" class="input-control" inputmode="decimal" type="number" min="1" max="99" step="1" placeholder="75" />
+                  <p id="targetHint" class="field-hint"></p>
+                </div>
+
+                <div class="field">
+                  <label for="scheduled">Total Lectures Scheduled</label>
+                  <input id="scheduled" class="input-control" inputmode="numeric" type="number" min="0" step="1" placeholder="120" />
+                  <p id="scheduledHint" class="field-hint"></p>
+                </div>
+
+                <div class="field">
+                  <label for="conducted">Lectures Conducted</label>
+                  <input id="conducted" class="input-control" inputmode="numeric" type="number" min="0" step="1" placeholder="100" />
+                  <p id="conductedHint" class="field-hint"></p>
+                </div>
+
+                <div class="field">
+                  <label for="present">Lectures Present</label>
+                  <input id="present" class="input-control" inputmode="numeric" type="number" min="0" step="1" placeholder="76" />
+                  <p id="presentHint" class="field-hint"></p>
+                </div>
+              </form>
+
+              <div id="attendanceStatus" class="status-banner hidden" aria-live="polite">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path id="attendanceStatusIcon" d="M5 12l5 5L20 7" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <span id="attendanceStatusText">Status</span>
+              </div>
+
+              <div id="attendanceInsightCards" class="insight-list hidden">
+                <article id="belowCard" class="insight-card insight-danger hidden">
+                  <div class="insight-icon" aria-hidden="true">!</div>
+                  <div>
+                    <p class="insight-title">Need immediate recovery</p>
+                    <p class="insight-copy">
+                      Attend the next <strong id="needCount">0</strong> lecture(s) without missing any to reach <strong id="targetLabel1">75%</strong>.
+                    </p>
+                  </div>
+                </article>
+
+                <article id="aboveCard" class="insight-card insight-success hidden">
+                  <div class="insight-icon" aria-hidden="true">+</div>
+                  <div>
+                    <p class="insight-title">Attendance margin available</p>
+                    <p class="insight-copy">
+                      You can bunk up to <strong id="bunkCount">0</strong> lecture(s) and still remain at or above <strong id="targetLabel2">75%</strong>.
+                    </p>
+                    <p id="moodMsg" class="insight-note">Nice. You still have breathing room.</p>
+                  </div>
+                </article>
+              </div>
+
+              <section id="attendanceProgressPanel" class="subpanel hidden" aria-labelledby="attendance-progress-title">
+                <div class="subpanel-header">
+                  <h3 id="attendance-progress-title">Progress toward <span id="targetLabel3">75%</span></h3>
+                  <p>Remaining term coverage and minimum attendance needed.</p>
+                </div>
+
+                <div class="counter-grid">
+                  <article class="counter-card">
+                    <span class="counter-label">Remaining Lectures</span>
+                    <strong id="remainingLectures" class="counter-value counter-neutral">0</strong>
+                  </article>
+                  <article class="counter-card">
+                    <span class="counter-label">Still Needed</span>
+                    <strong id="stillNeededLectures" class="counter-value">0</strong>
+                  </article>
+                </div>
+
+                <div id="hopeMsg" class="status-banner hidden">
+                  <span id="hopeText">Status</span>
+                </div>
+              </section>
+
+              <section id="attendanceSummary" class="subpanel hidden" aria-labelledby="attendance-summary-title">
+                <div class="subpanel-header">
+                  <h3 id="attendance-summary-title">Term Summary</h3>
+                  <p>Final-target projection using total scheduled lectures.</p>
+                </div>
+
+                <div class="summary-grid">
+                  <article class="summary-card">
+                    <span class="summary-label">Current Attendance</span>
+                    <strong class="summary-value"><span id="curA">0</span> / <span id="curB">0</span></strong>
+                    <p class="summary-note"><span id="curPct">0.00</span>% based on conducted lectures</p>
+                  </article>
+
+                  <article class="summary-card">
+                    <span class="summary-label">Required to Hit <span id="targetLabel4">75%</span></span>
+                    <strong class="summary-value"><span id="reqA">0</span> / <span id="reqB">0</span></strong>
+                    <p class="summary-note"><span id="targetPctDisplay">75.00</span>% of final total <span id="finalTotalDisplay">0</span></p>
+                  </article>
+                </div>
+
+                <div class="feasibility-panel">
+                  <div class="feasibility-topline">
+                    <span id="feasibilityBadge" class="feasibility-badge">--</span>
+                    <p id="feasText">Fill in your data to evaluate feasibility.</p>
+                  </div>
+                  <div id="progressAria" class="progress-track" aria-label="Progress to target attendance">
+                    <div id="progressInner" class="progress-fill"></div>
+                  </div>
+                  <p class="progress-meta">
+                    Remaining: <strong id="remainCount">0</strong>
+                    <span class="dot-separator" aria-hidden="true"></span>
+                    Need at least: <strong id="needTo75">0</strong>
+                  </p>
+                </div>
+              </section>
+            </div>
+
+            <aside class="attendance-visual-panel">
+              <article class="surface-inset meter-card">
+                <div class="ring-shell">
+                  <svg class="attendance-ring" width="220" height="220" viewBox="0 0 220 220" role="img" aria-label="Attendance progress ring">
+                    <defs>
+                      <linearGradient id="attendanceGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#1761ff"></stop>
+                        <stop offset="50%" stop-color="#16c2d5"></stop>
+                        <stop offset="100%" stop-color="#f8c84f"></stop>
+                      </linearGradient>
+                    </defs>
+                    <circle class="ring-track" cx="110" cy="110" r="90" stroke-width="16" fill="none"></circle>
+                    <circle id="attendanceBar" class="ring-fill" cx="110" cy="110" r="90" stroke-width="16" fill="none"></circle>
+                  </svg>
+
+                  <div class="ring-content">
+                    <strong class="ring-percent"><span id="percentCount">0</span>%</strong>
+                    <span id="subLabel" class="ring-subtext">Attendance of conducted lectures</span>
+                  </div>
+                </div>
+
+                <div class="button-row">
+                  <button id="quick75" class="action-button primary" type="button">Set Present to Target</button>
+                  <button id="attendanceReset" class="action-button secondary" type="button">Reset Attendance</button>
+                </div>
+              </article>
+            </aside>
+          </div>
+        </section>
+
+  <!-- SGPA calculation module. -->
+        <section id="sgpa-section" class="surface-card module-card sgpa-module" aria-labelledby="sgpa-title">
+          <div class="module-heading">
+            <div>
+              <p class="eyebrow">Semester Performance</p>
+              <h2 id="sgpa-title">SGPA Calculator</h2>
+            </div>
+            <p class="module-description">Marks-to-grade-point conversion with weighted credits and animated SGPA output.</p>
+          </div>
+
+          <div class="sgpa-layout">
+            <section class="subjects-panel" aria-label="Subjects input table">
+              <div class="subject-toolbar">
+                <button id="addRowBtn" class="action-button primary" type="button">Add Subject</button>
+                <button id="resetSgpaBtn" class="action-button secondary" type="button">Reset SGPA</button>
+              </div>
+
+              <div class="subjects-table-head" aria-hidden="true">
+                <span>Obtained Marks</span>
+                <span>Credits</span>
+                <span>Grade Point</span>
+                <span>Action</span>
+              </div>
+
+              <div id="rows" class="subject-rows" aria-live="polite"></div>
+            </section>
+
+            <aside class="surface-inset sgpa-summary-card" id="sgpaCard" role="status" aria-live="polite" aria-atomic="true">
+              <p class="eyebrow">Live SGPA</p>
+              <strong id="sgpaValue" class="sgpa-value">--</strong>
+              <p id="totalCredits" class="sgpa-credits">Total Credits: 0</p>
+              <p id="sgpaHelp" class="sgpa-help">Add subjects and enter marks to begin.</p>
+            </aside>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Attendance and SGPA Calculator Dashboard</p>
+      <p>Your values are stored locally in this browser for convenience.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
